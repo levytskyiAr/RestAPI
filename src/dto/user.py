@@ -1,8 +1,10 @@
 from pydantic import BaseModel
+from typing import Optional
+from datetime import date
 
 class User(BaseModel):
     name: str
     last_name: str
-    email: str
+    email: Optional[str]
     phone: int
-    birthday: str
+    birthday: Optional[date]
