@@ -1,10 +1,15 @@
-from pydantic import BaseModel
+import uuid
 from typing import Optional
-from datetime import date
+from pydantic import BaseModel, EmailStr, Field
+from fastapi_users import schemas
+from models.model import Role
 
-class User(BaseModel):
-    name: str
-    last_name: str
-    email: Optional[str]
-    phone: int
-    birthday: Optional[date]
+
+class UserRead(schemas.BaseUser[uuid.UUID]):
+    username: str
+
+class UserCreate(schemas.BaseUserCreate):
+    username: str
+
+class UserUpdate(schemas.BaseUserUpdate):
+    username: str
