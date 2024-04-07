@@ -21,6 +21,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 libgravatar = "^1.0.4"
 fastapi-users = "^13.0.0"
 fastapi-users-db-sqlalchemy = "^6.0.1"
+fastapi-mail = "^1.4.1"
 
 
 [build-system]

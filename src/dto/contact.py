@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from datetime import datetime, date
-from dto.user import UserRead
+from dto.user import UserResponse
 
 class ContactSchema(BaseModel):
     name: str = Field(min_length=3, max_length=20)
@@ -23,7 +23,7 @@ class ContactResponse(BaseModel):
     birthday: Optional[date]
     created_at: datetime | None
     updated_at: datetime | None
-    user: UserRead | None
+    user: UserResponse | None
 
     class Config:
         from_attributes = True
