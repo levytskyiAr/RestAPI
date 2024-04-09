@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends, status, Path, Query
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi_limiter.depends import RateLimiter
 
-from database.fu_db import get_db
+from database.database import get_db
 from models.model import User, Role
 from repository import contact as ContactService
 from services.roles import RoleAccess
@@ -13,27 +14,31 @@ router = APIRouter()
 
 access_to_route_all = RoleAccess([Role.admin, Role.moderator])
 
-@router.post('/',  response_model=ContactResponse, status_code=status.HTTP_201_CREATED, tags=['Contact'])
+@router.post('/',  response_model=ContactResponse, status_code=status.HTTP_201_CREATED, tags=['Contact'], dependencies=[Depends(RateLimiter(times=1, seconds=20))])
 async def create_contact(data: ContactSchema, db: AsyncSession = Depends(get_db),
                       user: User = Depends(auth_service.get_current_user)):
     man = await ContactService.create_contact(data, db, user)
     return man
 
 @router.get('/{id}', tags=['Contact'])
-async def get_contact(id: int = None, db: AsyncSession = Depends(get_db)):
-    return await ContactService.get_contact(id, db)
+async def get_contact(id: int = None, db: AsyncSession = Depends(get_db), user: User = Depends(auth_service.get_current_user)):
+    man = await ContactService.get_contacts(db, user, id)
+    return man
 
 @router.get('/name/{name}', tags=['Contact'])
-async def get_contact_by_name(name: str, db: AsyncSession = Depends(get_db)):
-    return await ContactService.get_contact_by_name(name, db)
+async def get_contact_by_name(name: str, db: AsyncSession = Depends(get_db), user: User = Depends(auth_service.get_current_user)):
+    man = await ContactService.get_contacts(db, user, name)
+    return man
 
 @router.get('/last_name/{last_name}', tags=['Contact'])
-async def get_contact_by_last_name(last_name: str, db: AsyncSession = Depends(get_db)):
-    return await ContactService.get_contact_by_last_name(last_name, db)
+async def get_contact_by_last_name(last_name: str, db: AsyncSession = Depends(get_db), user: User = Depends(auth_service.get_current_user)):
+    man = await ContactService.get_contacts(db, user, last_name)
+    return man
 
 @router.get('/email/{email}', tags=['Contact'])
-async def get_contact_by_email(email: str, db: AsyncSession = Depends(get_db)):
-    return await ContactService.get_contact_by_email(email, db)
+async def get_contact_by_email(email: str, db: AsyncSession = Depends(get_db), user: User = Depends(auth_service.get_current_user)):
+    man = await ContactService.get_contacts(db, user, email)
+    return man
 
 @router.get('/all', response_model=list[ContactResponse], tags=['Contact'])
 async def get_contacts(db: AsyncSession = Depends(get_db), user: User = Depends(auth_service.get_current_user)):
@@ -53,5 +58,6 @@ async def delete_contact(id: int = Path(ge=1), db: AsyncSession = Depends(get_db
     return man
 
 @router.get('/user/{birthday}', tags=['Contact'])
-async def birthday_seven(db: AsyncSession = Depends(get_db)):
-    return await ContactService.birthday_seven(db)
+async def birthday_seven(db: AsyncSession = Depends(get_db),user: User = Depends(auth_service.get_current_user)):
+    man = await ContactService.delete_contact(db, user)
+    return man

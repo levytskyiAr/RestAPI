@@ -3,13 +3,13 @@ from fastapi.security import OAuth2PasswordRequestForm, HTTPAuthorizationCredent
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.fu_db import get_db
+from database.database import get_db
 from repository import user as repositories_users
 from dto.user import UserSchema, TokenSchema, UserResponse, RequestEmail
 from services.auth import auth_service
 from services.email import send_email
 
-router = APIRouter(prefix='/auth', tags=['auth'])
+router = APIRouter(tags=['auth'])
 get_refresh_token = HTTPBearer()
 
 

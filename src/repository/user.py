@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from libgravatar import Gravatar
 
-from database.fu_db import get_db
+from database.database import get_db
 from models.model import User
 from dto.user import UserSchema
 
@@ -38,3 +38,10 @@ async def confirmed_email(email: str, db: AsyncSession) -> None:
     user = await get_user_by_email(email, db)
     user.confirmed = True
     await db.commit()
+
+async def update_avatar_url(email: str, url: str | None, db: AsyncSession) -> User:
+    user = await get_user_by_email(email, db)
+    user.avatar = url
+    await db.commit()
+    await db.refresh(user)
+    return user
