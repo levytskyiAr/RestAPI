@@ -9,9 +9,9 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from jose import JWTError, jwt
 
-from database.database import get_db
-from repository import user as repository_users
-from conf.config import config
+from src.database.database import get_db
+from src.repository import user as repository_users
+from src.conf.config import config
 
 
 class Auth:

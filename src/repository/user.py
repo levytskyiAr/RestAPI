@@ -3,9 +3,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from libgravatar import Gravatar
 
-from database.database import get_db
-from models.model import User
-from dto.user import UserSchema
+from src.database.database import get_db
+from src.models.model import User
+from src.dto.user import UserSchema
 
 
 async def get_user_by_email(email: str, db: AsyncSession = Depends(get_db)):

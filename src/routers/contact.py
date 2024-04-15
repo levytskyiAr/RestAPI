@@ -2,13 +2,13 @@ from fastapi import APIRouter, HTTPException, Depends, status, Path, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_limiter.depends import RateLimiter
 
-from database.database import get_db
-from models.model import User, Role
-from repository import contact as ContactService
-from services.roles import RoleAccess
-from services.auth import auth_service
-from dto.contact import ContactResponse, ContactSchema
-from dto import contact 
+from src.database.database import get_db
+from src.models.model import User, Role
+from src.repository import contact as ContactService
+from src.services.roles import RoleAccess
+from src.services.auth import auth_service
+from src.dto.contact import ContactResponse, ContactSchema
+from src.dto import contact 
 
 router = APIRouter()
 

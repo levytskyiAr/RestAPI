@@ -4,8 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from fastapi import Depends
 
-from dto.contact import ContactSchema, ContactUpdateSchema
-from models.model import Contact, User
+from src.dto.contact import ContactSchema, ContactUpdateSchema
+from src.models.model import Contact, User
 
 
 async def create_contact(data: ContactSchema, user: User, db: AsyncSession):
@@ -23,30 +23,11 @@ async def create_contact(data: ContactSchema, user: User, db: AsyncSession):
     :return: A contact object
     :doc-author: Trelent
     """
-    user = Contact(**data.model_dump(exclude_unset=True),user=user)
-    db.add(user)
+    contact = Contact(**data.model_dump(exclude_unset=True),user=user)
+    db.add(contact)
     await db.commit()
-    await db.refresh(user)
-    return user
-
-async def get_contact(id: int, db:AsyncSession):
-    """
-    The get_contact function returns a contact object from the database.
-        Args:
-            id (int): The ID of the contact to be retrieved.
-            db (AsyncSession): An async session for interacting with the database.
-        Returns:
-            Contact: A single Contact object matching the provided ID.
-    
-    :param id: int: Specify the id of the contact to be returned
-    :param db:AsyncSession: Pass the database session to the function
-    :return: A contact object
-    :doc-author: Trelent
-    """
-    stmt = select(Contact).filter_by(id=id)
-    user = await db.execute(stmt)
-    user = user.scalar_one_or_none()
-    return user
+    await db.refresh(contact)
+    return contact
 
 async def get_contact_by_name(name: str, db: AsyncSession):
     """
@@ -99,6 +80,27 @@ async def get_contact_by_email(email: str, db: AsyncSession):
     user = user.scalar_one_or_none()
     return user
 
+
+async def get_contact(id: int, db:AsyncSession):
+    """
+    The get_contact function returns a contact object from the database.
+        Args:
+            id (int): The ID of the contact to be retrieved.
+            db (AsyncSession): An async session for interacting with the database.
+        Returns:
+            Contact: A single Contact object matching the provided ID.
+    
+    :param id: int: Specify the id of the contact to be returned
+    :param db:AsyncSession: Pass the database session to the function
+    :return: A contact object
+    :doc-author: Trelent
+    """
+    stmt = select(Contact).filter_by(id=id)
+    user = await db.execute(stmt)
+    user = user.scalar_one_or_none()
+    return user
+
+
 async def get_contacts(db: AsyncSession):
     """
     The get_contacts function returns a list of all contacts in the database.
@@ -129,7 +131,7 @@ async def update_contact(data: ContactUpdateSchema, id: int, db: AsyncSession, u
     result = await db.execute(stmt)
     contact = result.scalar_one_or_none()
     if contact:
-        update_data = data.model_dump(exclude_unset=True)
+        update_data = data.dict(exclude_unset=True)
         for key, value in update_data.items():
             setattr(contact, key, value)
         await db.commit()

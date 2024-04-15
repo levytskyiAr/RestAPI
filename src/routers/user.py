@@ -5,12 +5,12 @@ from fastapi import (APIRouter, HTTPException, Depends, status, Path, Query, Upl
 from fastapi_limiter.depends import RateLimiter
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.database import get_db
-from models.model import User
-from dto.user import UserResponse
-from services.auth import auth_service
-from conf.config import config
-from repository import user as repositories_users
+from src.database.database import get_db
+from src.models.model import User
+from src.dto.user import UserResponse
+from src.services.auth import auth_service
+from src.conf.config import config
+from src.repository import user as repositories_users
 
 router = APIRouter(prefix="/users", tags=["users"])
 cloudinary.config(

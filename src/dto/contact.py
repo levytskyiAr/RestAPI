@@ -1,7 +1,7 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import Optional
 from datetime import datetime, date
-from dto.user import UserResponse
+from src.dto.user import UserResponse
 
 class ContactSchema(BaseModel):
     name: str = Field(min_length=3, max_length=20)
@@ -25,7 +25,6 @@ class ContactResponse(BaseModel):
     updated_at: datetime | None
     user: UserResponse | None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes = True)
 
 
