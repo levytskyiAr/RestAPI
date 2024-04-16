@@ -8,11 +8,14 @@ class ContactSchema(BaseModel):
     last_name: str = Field(min_length=3, max_length=20)
     email: Optional[EmailStr]
     phone: int
-    birthday: Optional[date]
+    birthday: str
 
 class ContactUpdateSchema(ContactSchema):
-    email: bool
-    phone: bool
+    name: str = Field(min_length=3, max_length=20)
+    last_name: str = Field(min_length=3, max_length=20)
+    email: Optional[EmailStr]
+    phone: int
+    birthday: str
 
 class ContactResponse(BaseModel):
     id: int = 1
@@ -20,7 +23,7 @@ class ContactResponse(BaseModel):
     last_name: str
     email: Optional[str]
     phone: int
-    birthday: Optional[date]
+    birthday: str
     created_at: datetime | None
     updated_at: datetime | None
     user: UserResponse | None

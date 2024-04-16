@@ -3,14 +3,9 @@ from datetime import date
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, ForeignKey, DateTime, func, Enum, Boolean
-from sqlalchemy.orm import DeclarativeBase
-from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID, generics
-from fastapi_users_db_sqlalchemy.generics import GUID
+from sqlalchemy.ext.declarative import declarative_base
 
-
-class Base(DeclarativeBase):
-    pass
-
+Base = declarative_base()
 
 class Contact(Base):
     __tablename__ = 'contact'

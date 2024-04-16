@@ -14,7 +14,7 @@ router = APIRouter()
 
 access_to_route_all = RoleAccess([Role.admin, Role.moderator])
 
-@router.post('/',  response_model=ContactResponse, status_code=status.HTTP_201_CREATED, tags=['Contact'], dependencies=[Depends(RateLimiter(times=1, seconds=20))])
+@router.post('/', response_model=ContactResponse, status_code=status.HTTP_201_CREATED, tags=['Contact'])
 async def create_contact(data: ContactSchema, db: AsyncSession = Depends(get_db),
                       user: User = Depends(auth_service.get_current_user)):
     man = await ContactService.create_contact(data, db, user)
